@@ -1,0 +1,195 @@
+These programs are released courtesy of BP. They were originally written
+by Joe Dellinger in 1997 at the former Amoco Tulsa Technology Center, released
+informally in April 2000, and then reworked for more formal release in
+March 2005. I would appreciate acknowledgement if you find them useful.
+If you want to include this code in some package you are distributing,
+then please acknowledge where the code came from, and how what you
+are distributing varies from what I distributed.
+
+These programs should work on anything with a reasonable C compiler.
+
+--- Joe Dellinger
+BP EPTG, Houston, Texas
+Thu Mar 24 19:56:42 CST 2005
+
+------------------------------------------------------------------------------
+
+Copyright notice for SEG distribution:
+
+Copyright (c) 2005 by the Society of Exploration Geophysicists.
+For more information, go to http://software.seg.org/2005/0001 .
+You must read and accept usage terms at:
+http://software.seg.org/disclaimer.txt before use.
+
+------------------------------------------------------------------------------
+
+To compile:
+	(using GNU make and GNU cc)
+	make
+
+	(ignore any warning about possible use of uninitialized variables
+	in titest... it's a bogus warning)
+
+
+To print man pages:
+
+	nroff -man < titest.mn
+	nroff -man < orthotest.mn
+
+To install:
+	up to you
+
+To clean up:
+
+	make clean
+
+------------------------------------------------------------------------------
+
+What's here?:
+
+titest, orthotest
+
+What they do:
+Titest and orthotest are programs for calculating how close to
+transversely isotropic or orthorhombic a set of 21 elastic constants are.
+General anisotropy requires 21 velocity parameters to describe.
+Orthorhombic media have 3 perpendicular planes of symmetry, and require 9.
+Transversely isotropic ("TI") has an axis of rotational symmetry and
+requires only 5. There is no proprietary information in these programs;
+they merely implement equations described in a paper by Patrick Rasolofosaon
+of IFP. (Note there are typos in some equations listed in that paper.)
+Those equations define a "distance" measure between two sets of 21 elastic
+constants. The only "tricky" coding in these programs is how I do the
+search over all possible orientations of the anisotropic symmetry axes.
+
+What they are useful for:
+These programs are mostly useful for testing and debugging various other
+programs for manipulating and/or inverting elastic constants.
+
+These programs accept as input 21 elastic constants, and output the nearest
+TI and orthorhombic equivalents.
+
+------------------------------------------------------------------------------
+
+To test:
+
+titest < TI_TEST_INPUT
+
+Here is an example of program "titest". The input is in fact TI, but
+its coordinate system has been rotated to obscure this fact. The
+constants have been (accidentally) perturbed and rotated from constants
+in: L. E. A. Jones and H. F. Wang, 1981, Ultrasonic velocities in
+Cretaceous shales from the Williston Basin: GEOPHYSICS, 46, 288-297.
+
+Input C matrix:
+      331.3         128       112.3      -1.304      -23.33      -1.922 
+        128       339.4       108.7      -9.835      -4.084      -1.994 
+      112.3       108.7       226.2      0.4475       1.101       1.748 
+     -1.304      -9.835      0.4475       56.89        1.27      -9.889 
+     -23.33      -4.084       1.101        1.27        59.5      -3.662 
+     -1.922      -1.994       1.748      -9.889      -3.662       103.7 
+
+
+Rotated C matrix:
+        341         129         107  -6.207e-05  -3.986e-05  -0.0002278 
+        129         341         107  -3.395e-07   1.949e-05   4.203e-05 
+        107         107         227   5.273e-06  -2.096e-05  -0.0001103 
+ -6.207e-05  -3.395e-07   5.273e-06          54   1.381e-05   4.175e-05 
+ -3.986e-05   1.949e-05  -2.096e-05   1.381e-05          54   1.415e-05 
+ -0.0002278   4.203e-05  -0.0001103   4.175e-05   1.415e-05         106 
+
+TI approximation:
+        341         129         107           0           0           0 
+        129         341         107           0           0           0 
+        107         107         227           0           0           0 
+          0           0           0          54           0           0 
+          0           0           0           0          54           0 
+          0           0           0           0           0         106 
+
+TI approximation in original coordinate system:
+      331.3         128       112.3      -1.304      -23.33      -1.922 
+        128       339.4       108.7      -9.835      -4.084      -1.994 
+      112.3       108.7       226.2      0.4474       1.101       1.748 
+     -1.304      -9.835      0.4474       56.89        1.27      -9.889 
+     -23.33      -4.084       1.101        1.27        59.5      -3.662 
+     -1.922      -1.994       1.748      -9.889      -3.662       103.7 
+
+Normalized deviation from TI in original coordinate system, in percent:
+    -0.0000     -0.0000     -0.0000     -0.0000      0.0000      0.0000 
+    -0.0000      0.0001      0.0000     -0.0000     -0.0000      0.0000 
+    -0.0000      0.0000     -0.0000      0.0000      0.0000      0.0000 
+    -0.0000     -0.0000      0.0000     -0.0000      0.0000      0.0000 
+     0.0000     -0.0000      0.0000      0.0000      0.0000      0.0000 
+     0.0000      0.0000      0.0000      0.0000      0.0000     -0.0000 
+
+distance from TI = 0.000 percent
+Symmetry axis: (0.1981, 0.0805, 0.9769)
+theta = 67.890,   phi = 12.345
+
+------------------------------------------------------------------------------
+
+Here is an example of program "orthotest". This example comes from a
+paper by Robert Vestrum, then at the University of Calgary:
+Vestrum, R., Brown, J., and Easley, D. T., 1996,
+From group or phase velocities to the general anisotropic stiffness tensor,
+in Seismic Anisotropy, edited by J. Rathore, p. 101-140, published by the SEG.
+
+Rob measured 21 elastic constants for a laboratory sample, a synthetic
+medium made of resin and burlap that was designed to have orthorhombic
+symmetry. This program finds that his elastic constants are indeed very
+close to being orthorhombic and shows the orientation of the sample.
+If the medium was in fact not only orthorhombic but TI, this program also
+detects that by trying out each orthorhombic symmetry axis to see how
+well it works as a TI axis of symmetry.
+
+In this example we see the medium is not terribly orthorhombic... one of
+the orthorhombic axes found is quite close to also being a TI symmetry axis.
+
+orthotest < VESTRUM_TEST_INPUT
+
+Input C matrix:
+      16.85        7.88        6.81        0.07       -0.18        0.12 
+       7.88       16.03        6.51           0       -0.26       -0.08 
+       6.81        6.51       11.14           0       -0.05       -0.04 
+       0.07           0           0        3.03        0.01        0.04 
+      -0.18       -0.26       -0.05        0.01         3.4       -0.01 
+       0.12       -0.08       -0.04        0.04       -0.01        3.89 
+
+
+Rotated C matrix:
+      16.05       7.881       6.497     -0.1896    -0.01734     -0.0446 
+      7.881       16.89       6.789    -0.01128     0.08461    0.008745 
+      6.497       6.789       11.14     0.07228    -0.01369    -0.06715 
+    -0.1896    -0.01128     0.07228       3.389    -0.01637    -0.01323 
+   -0.01734     0.08461    -0.01369    -0.01637       3.036     0.07561 
+    -0.0446    0.008745    -0.06715    -0.01323     0.07561       3.862 
+
+Orthorhombic approximation:
+      16.05       7.881       6.497           0           0           0 
+      7.881       16.89       6.789           0           0           0 
+      6.497       6.789       11.14           0           0           0 
+          0           0           0       3.389           0           0 
+          0           0           0           0       3.036           0 
+          0           0           0           0           0       3.862 
+
+Orthorhombic approximation in original coordinates:
+      16.86       7.891       6.789    0.002643     -0.1654      0.1098 
+      7.891       16.04       6.503     0.01784    -0.07036     -0.0364 
+      6.789       6.503       11.15    0.002313     -0.1208     0.02525 
+   0.002643     0.01784    0.002313       3.041     0.03028     -0.0423 
+    -0.1654    -0.07036     -0.1208     0.03028       3.388  -0.0004675 
+     0.1098     -0.0364     0.02525     -0.0423  -0.0004675       3.873 
+
+Normalized deviation from Orthorhombic in original coordinates, in percent:
+    -0.0180     -0.0320      0.0629      0.2021     -0.0438      0.0307 
+    -0.0320     -0.0445      0.0222     -0.0535     -0.5690     -0.1308 
+     0.0629      0.0222     -0.0438     -0.0069      0.2125     -0.1958 
+     0.2021     -0.0535     -0.0069     -0.0338     -0.0608      0.2469 
+    -0.0438     -0.5690      0.2125     -0.0608      0.0347     -0.0286 
+     0.0307     -0.1308     -0.1958      0.2469     -0.0286      0.0522 
+
+Distance from Orthorhombic = 1.563 percent
+
+X axis: (0.0860, -0.9963, -0.0089)  theta=175.069, phi=90.511, TI dist=13.479%
+Y axis: (-0.9950, -0.0863, 0.0496)  theta=-94.957, phi=87.158, TI dist=11.422%
+Z axis: (-0.0502, 0.0046, -0.9987)  theta=-84.748, phi=177.112, TI dist=3.464%

@@ -1,0 +1,72 @@
+.TH orthotest 1 "18 Feb 1997"
+.SH NAME
+orthotest \- see if a set of anisotropic elastic constants are orthorhombic
+.SH SYNOPSIS
+.BI "orthotest < elastic_constants
+.PP
+.B orthotest
+expects to read from standard input an anisotropic
+elastic stiffness matrix in the form of 6 numbers on each of 6 lines of input.
+It finds the best-fitting orthorhombic medium to this,
+and outputs:
+.br
+0) the input anisotropic stiffness constants,
+.br
+1) the elastic constants rotated so that the best-fitting orthorhombic
+matrix has the X, Y, and Z axes as principal axes,
+.br
+2) the orthorhombic approximation to the rotated matrix,
+.br
+3) the orthorhombic approximation in the original coordinate system,
+.br
+4) the percent difference between the input stiffness matrix and the
+best-fitting
+orthorhombic approximation in the original coordinates (normalized by
+dividing each difference by the norm of the input stiffness matrix),
+.br
+5) the percent difference of the anisotropic elastic constants
+from orthorhombic, and
+.br
+6) the coordinates of the 3 principle axes in the original coordinate system,
+in both cartesian and spherical notation.
+.LP
+Theoretically,
+it is arbitrary how the three principal axes should be assigned to X, Y, and Z.
+This program tries each axis in turn to see how close it is to being an axis of
+transversely isotropic (TI) symmetry.
+The axes are then reordered
+so that the Z axis is the closest to being a TI axis of symmetry,
+then Y next closest, then X furthest.
+Thus, if the input medium is TI the Z axis
+will always be chosen as the axis of symmetry.
+(Note that if the input medium is arbitrarily anisotropic, there is
+no reason to expect that the Z axis found by this program should precisely
+coincide with the best-fitting TI axis found by the program titest.)
+.LP
+Spherical coordinates are specified using phi and theta:
+.br
+phi=0 is the +Z axis
+.br
+phi=90 theta=0 is the +X axis
+.br
+phi=90 theta=90 is the +Y axis
+.LP
+For more about what "best-fitting" means for elastic stiffness matrices, see
+the article by Arts, Helbig, and Rasolofosaon in the SEG extended abstracts
+for 1991, page 1534: "General Anisotropic Elastic Tensor in Rocks:
+Approximation, Invariants, and Particular Directions".
+.LP
+See the
+.B titest
+man page for example input.
+.SH OPTIONS
+Currently there are no options or arguments.
+.SH AUTHOR
+This program was written by Joe Dellinger at the Amoco Tulsa Technology Center
+during February 1997.
+This version is copyright (c) 2005 by the Society
+of Exploration Geophysicists. For more information,
+see http://software.seg.org/2005/0001. You must read and accept the
+terms of usage in disclaimer.txt before use.
+.SH SEE ALSO
+.BR titest (l)

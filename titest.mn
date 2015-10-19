@@ -1,0 +1,91 @@
+.TH titest 1 "18 Feb 1997"
+.SH NAME
+titest \- see if a set of anisotropic elastic constants are
+transversely isotropic
+.SH SYNOPSIS
+.BI "titest < elastic_constants
+.PP
+.B titest
+expects to read from standard input a fully general anisotropic
+stiffness matrix in the form of 6 numbers on each of 6 lines of input.
+It finds the best-fitting transversely isotropic (TI) medium,
+and outputs:
+.br
+0) the input matrix,
+.br
+1) the input elastic constants rotated so that the
+best-fitting TI axis is the Z axis,
+.br
+2) the TI approximation to the rotated matrix,
+.br
+3) the TI approximation in the original unrotated coordinate system,
+.br
+4) the percent difference between the input stiffness matrix and the
+best-fitting TI approximation, in the original coordinates (normalized
+by dividing each element in the difference matrix
+by the scalar norm of the input stiffness matrix),
+.br
+5) the total scalar percent difference from TI, and
+.br
+6) the coordinates of the axis vector, in both cartesian and spherical
+notation.
+.LP
+Note for the ``total scalar percent difference from TI'',
+0 means the medium is exactly TI.
+100% is the maximum possible error. This is only possible in extreme cases,
+for example if c16=1 and all the other elastic constants are 0.
+Such a case (the medium has no TI component at all, and all the
+error is concentrated in a single elastic constant) would also be the only
+way a 100% error in an individual stiffness constant could be
+attained.
+.LP
+Spherical coordinates are specified using phi and theta:
+.br
+phi=0 is the +Z axis
+.br
+phi=90 theta=0 is the +X axis
+.br
+phi=90 theta=90 is the +Y axis
+.LP
+For more about what "best-fitting" means for elastic stiffness matrices, see
+the article by Arts, Helbig, and Rasolofosaon in the SEG extended abstracts
+for 1991, page 1534: "General Anisotropic Elastic Tensor in Rocks:
+Approximation, Invariants, and Particular Directions".
+.SH OPTIONS
+Currently there are no options or arguments.
+.SH EXAMPLES
+The following stiffness matrix is TI (transversely isotropic),
+but this fact is not obvious because it has been
+rotated to have a symmetry axis pointing in the direction
+phi=12.345 and theta=67.890 degrees:
+.PP
+.nf
+ 331.325      128.029      112.309     -1.30380     -23.3328     -1.92204
+ 128.029      339.374      108.716     -9.83459     -4.08399     -1.99410
+ 112.309      108.716      226.191     0.447454      1.10140      1.74841
+ -1.30380     -9.83459     0.447454      56.8929      1.27023     -9.88887
+ -23.3328     -4.08399      1.10140      1.27023      59.5035     -3.66209
+ -1.92204     -1.99410      1.74841     -9.88887     -3.66209      103.658
+.fi
+.PP
+Inputting this matrix into titest finds the TI equivalent with the Z
+axis as the symmetry axis:
+.PP
+.nf
+ 341          129          107            0            0            0 
+ 129          341          107            0            0            0 
+ 107          107          227            0            0            0 
+ 0            0            0              54           0            0 
+ 0            0            0              0            54           0 
+ 0            0            0              0            0            106 
+.fi
+.PP
+.SH AUTHOR
+This program was written by Joe Dellinger at the Amoco Tulsa Technology Center
+during February 1997.
+This version is copyright (c) 2005 by the Society
+of Exploration Geophysicists. For more information,
+see http://software.seg.org/2005/0001. You must read and accept the
+terms of usage in disclaimer.txt before use.
+.SH SEE ALSO
+.BR orthotest (l)
